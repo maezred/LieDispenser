@@ -1,6 +1,8 @@
 package net.moltendorf.Bukkit.LieDispenser;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -23,10 +25,15 @@ public class Listeners implements Listener {
 
 	final protected Plugin          plugin;
 	final protected BukkitScheduler scheduler;
+	final protected boolean         infinite;
 
 	protected Listeners(final Plugin instance) {
 		plugin = instance;
-		scheduler = plugin.getServer().getScheduler();
+
+		final Server server = plugin.getServer();
+
+		scheduler = server.getScheduler();
+		infinite = server.getDefaultGameMode() == GameMode.CREATIVE;
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -70,7 +77,9 @@ public class Listeners implements Listener {
 		if (relative.getType() == Material.AIR) {
 			relative.setType(Material.CAKE_BLOCK); // PLACE A CAKE!
 
-			scheduler.scheduleSyncDelayedTask(plugin, () -> ((InventoryHolder)blockState).getInventory().removeItem(item));
+			if (!infinite) {
+				scheduler.scheduleSyncDelayedTask(plugin, () -> ((InventoryHolder)blockState).getInventory().removeItem(item));
+			}
 		}
 
 		event.setCancelled(true);
