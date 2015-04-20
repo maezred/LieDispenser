@@ -1,0 +1,6 @@
+name: LieDispenser
+version: 1.0.0
+description: Dispensing a cake will place a lie!
+author: moltendorf
+website: http://dev.bukkit.org/server-mods/moltendorf-liedispenser/
+main: net.moltendorf.Bukkit.LieDispenser.Plugin
