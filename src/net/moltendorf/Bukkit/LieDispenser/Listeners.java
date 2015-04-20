@@ -2,6 +2,7 @@ package net.moltendorf.Bukkit.LieDispenser;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -46,7 +47,13 @@ public class Listeners implements Listener {
 
 		final MaterialData blockStateData = blockState.getData();
 		final Dispenser    dispenser      = (Dispenser)blockStateData;
-		final Block        relative       = block.getRelative(dispenser.getFacing());
+		final BlockFace    facing         = dispenser.getFacing();
+
+		Block relative = block.getRelative(facing);
+
+		if (relative.getType() != Material.AIR) {
+			relative = relative.getRelative(facing);
+		}
 
 		if (relative.getType() == Material.AIR) {
 			relative.setType(Material.CAKE_BLOCK); // PLACE A CAKE!
