@@ -51,8 +51,20 @@ public class Listeners implements Listener {
 
 		Block relative = block.getRelative(facing);
 
+		// Check in front of dispenser.
 		if (relative.getType() != Material.AIR) {
+			Block up = relative.getRelative(BlockFace.UP);
 			relative = relative.getRelative(facing);
+
+			// Check another block in the front of the dispenser.
+			if (facing != BlockFace.UP && facing != BlockFace.DOWN && relative.getType() != Material.AIR) {
+				// Check above the blocks.
+				if (up.getType() != Material.AIR) {
+					relative = relative.getRelative(BlockFace.UP);
+				} else {
+					relative = up;
+				}
+			}
 		}
 
 		if (relative.getType() == Material.AIR) {
